@@ -1,11 +1,15 @@
 package org.dreambot.fragr;
 
 import org.dreambot.api.script.AbstractScript;
+import org.dreambot.api.script.Category;
+import org.dreambot.api.script.ScriptManifest;
+import org.dreambot.fragr.api.GUI;
 
+@ScriptManifest(author = "Fragr", category = Category.COMBAT, description = "Kills Ammonite Crabs", name = "Ammonite Crab Killer", version = 1.0)
 public class Main extends AbstractScript {
     @Override
     public void onStart() {
-        super.onStart();
+        GUI window = new GUI();
     }
 
     @Override

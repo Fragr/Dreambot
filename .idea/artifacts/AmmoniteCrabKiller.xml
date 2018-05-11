@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AmmoniteCrabKiller">
+    <output-path>$USER_HOME$/DreamBot/Scripts</output-path>
+    <root id="archive" name="AmmoniteCrabKiller.jar">
+      <element id="module-output" name="AmmoniteCrabKiller" />
+    </root>
+  </artifact>
+</component>
