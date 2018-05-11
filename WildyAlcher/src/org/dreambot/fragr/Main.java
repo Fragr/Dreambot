@@ -1,4 +1,4 @@
-package org.dreambot.fragr.fragr;
+package org.dreambot.fragr;
 
 import org.dreambot.api.script.AbstractScript;
 
