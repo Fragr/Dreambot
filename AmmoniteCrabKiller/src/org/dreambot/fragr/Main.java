@@ -1,31 +1,56 @@
 package org.dreambot.fragr;
 
+import org.dreambot.api.methods.Calculations;
+import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
+import org.dreambot.api.utilities.Timer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@ScriptManifest(author = "Fragr", category = Category.COMBAT, description = "Kills Ammonite Crabs at Fossile Island", name = "Ammonite Crab Killer", version = 1.0)
+@ScriptManifest(author = "Fragr", category = Category.COMBAT, description = "Kills Ammonite Crabs at Fossil Island", name = "Ammonite Crab Killer", version = 1.0)
 public class Main extends AbstractScript {
 
     private boolean isRunning;
     private boolean usePoitions;
     private String runTime; //in minutes
+    private int crabsKilled;
+    private Timer timer;
+    private Area crabArea = new Area(3731, 3844, 3735, 3848);
+    private Area resetArea = new Area(3736, 3815, 3738, 3814);
+
     private String enemyName = "Ammonite Crab";
+
+    /*
+        Not in combat = -1
+        Attacking = 390
+        Being attacked = 1156
+
+        Positions by crabs (3733, 3847, 0) (3732, 3847, 0) (3733, 3846, 0)
+        Positions to reset agro (3737, 3814, 0) (3738, 3814, 0) (3736, 3814, 0)
+     */
 
     @Override
     public void onStart() {
+        timer = new Timer();
         createGUI();
     }
 
     @Override
     public int onLoop() {
         if(isRunning) {
-
+            //if player is NOT in combat AND player is in crabArea
+            if( !getLocalPlayer().isInCombat() /*&& crabArea.contains(getLocalPlayer().getTile())*/ ) {
+                //then walk to resetArea
+                if( !resetArea.contains(getLocalPlayer().getTile()) ) {
+                    getWalking().walk(resetArea.getRandomTile());
+                    sleep(Calculations.random(1000, 2000));
+                }
+            }
         }
         return 300;
     }
@@ -47,6 +72,27 @@ public class Main extends AbstractScript {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onPaint(Graphics g) {
+        g.setColor(Color.RED);
+        g.setFont(new Font("Arial", Font.PLAIN, 16));
+        g.drawString("Ammonite Crab Killer", 5, 20);
+
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("Arial", Font.PLAIN, 12));
+        g.drawString("Timer: " + timer.formatTime(), 5, 32);
+
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("Arial", Font.PLAIN, 12));
+        g.drawString("Crabs killed: " + crabsKilled, 5, 45);
+
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("Arial", Font.PLAIN, 12));
+        g.drawString("Crabs killed / hour: " + timer.getHourlyRate(crabsKilled), 5, 58);
+
+        //TODO add EXP an hour
     }
 
     private void createGUI() {
