@@ -99,10 +99,6 @@ public class Main extends AbstractScript {
     @Override
     public void onPause() {
         super.onPause();
-//        log("Running: " + isRunning);
-//        log("Run Time: " + runTime);
-//        log("Use Super Strength: " + usePoitions);
-//        log("Enemy: " + enemyName);
     }
 
     @Override
@@ -169,14 +165,6 @@ public class Main extends AbstractScript {
 
         JCheckBox potionCheckBox = new JCheckBox("Use Super Strength");
         settingPanel.add(potionCheckBox);
-
-//        JLabel label = new JLabel("Enemy name:");
-//        settingPanel.add(label);
-//
-//        JComboBox<String> enemyComboBox = new JComboBox<>(new String[]{
-//                "Ammonite Crab", "Rock Crab"
-//        });
-//        settingPanel.add(enemyComboBox);
 
         frame.getContentPane().add(settingPanel, BorderLayout.CENTER);
 
