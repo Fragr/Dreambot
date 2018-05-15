@@ -72,8 +72,9 @@ public class Main extends AbstractScript {
                 //Walk to reset area
                 getWalking().walk(resetArea.getRandomTile());
                 sleepWhile( () -> !resetArea.contains(getLocalPlayer().getTile()), Calculations.random(3000, 5000));
-                log("In reset area");
+
                 if( resetArea.contains(getLocalPlayer().getTile()) ) {
+                    log("In reset area");
                     sleep(Calculations.random(3000, 5000));
                     resetAgro = false;
                 }
