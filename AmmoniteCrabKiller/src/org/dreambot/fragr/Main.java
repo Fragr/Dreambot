@@ -23,7 +23,7 @@ public class Main extends AbstractScript {
 
     private String runTime; //in minutes
 
-    private Area crabArea = new Area(/*3257, 3244, 3259, 3247*/3733, 3846, 3734, 3847);
+    private Area crabArea = new Area(/*3257, 3244, 3259, 3247*/3733, 3846, 3733, 3847);
     private Area resetArea = new Area(/*3257, 3226, 3261, 3229*/3736, 3815, 3738, 3814);
 
     /*
@@ -70,7 +70,7 @@ public class Main extends AbstractScript {
             if( crabArea.contains(getLocalPlayer().getTile()) ) {
                 //log("In crab area");
                 //if player is NOT in combat for 7-12 seconds
-                if( !sleepWhile( () -> !getLocalPlayer().isInCombat(), Calculations.random(7000, 12000) ) ) {
+                if( !sleepWhile( () -> !getLocalPlayer().isInCombat(), Calculations.random(5000, 7000) ) ) {
                     resetAgro = true;
                     log("Running to reset area");
                 }
