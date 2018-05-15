@@ -10,3 +10,4 @@ Kills Ammonite Crabs on Fossil Island (must be on to start script properly) by r
 - Logout after specific time
 - Eating support
 - Bank for supplies (on the island only)
+- Change from tasked based script to node based
