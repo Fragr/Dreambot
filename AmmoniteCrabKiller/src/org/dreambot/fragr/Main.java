@@ -2,6 +2,7 @@ package org.dreambot.fragr;
 
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.map.Area;
+import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
@@ -15,16 +16,15 @@ import java.awt.event.ActionListener;
 @ScriptManifest(author = "Fragr", category = Category.COMBAT, description = "Kills Ammonite Crabs at Fossil Island", name = "Ammonite Crab Killer", version = 1.0)
 public class Main extends AbstractScript {
 
+    private Timer timer;
     private boolean isRunning;
     private boolean usePoitions;
     private boolean resetAgro;
+
     private String runTime; //in minutes
-    private int crabsKilled;
-    private Timer timer;
+
     private Area crabArea = new Area(/*3257, 3244, 3259, 3247*/3733, 3846, 3734, 3847);
     private Area resetArea = new Area(/*3257, 3226, 3261, 3229*/3736, 3815, 3738, 3814);
-
-    private String enemyName = "Ammonite Crab";
 
     /*
         Not in combat = -1
@@ -39,7 +39,15 @@ public class Main extends AbstractScript {
     public void onStart() {
         timer = new Timer();
         resetAgro = false;
-        createGUI();
+        isRunning = true;
+
+
+        //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
+        boolean scriptRunning = getClient().getInstance().getScriptManager().isRunning();
+        for(Skill s : Skill.values()){
+            getSkillTracker().start(s, !scriptRunning);
+        }
+        //createGUI();
     }
 
     @Override
@@ -106,21 +114,39 @@ public class Main extends AbstractScript {
     public void onPaint(Graphics g) {
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.PLAIN, 16));
-        g.drawString("Ammonite Crab Killer", 5, 20);
+        g.drawString("Ammonite Crab Killer " + getVersion(), 5, 17);
 
         g.setColor(Color.GREEN);
         g.setFont(new Font("Arial", Font.PLAIN, 12));
         g.drawString("Timer: " + timer.formatTime(), 5, 32);
 
-        g.setColor(Color.GREEN);
-        g.setFont(new Font("Arial", Font.PLAIN, 12));
-        g.drawString("Crabs killed: " + crabsKilled, 5, 45);
+        //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
+        int baseY = 45;
+        for(Skill s : Skill.values()){
+            if(getSkillTracker().getGainedExperience(s) > 0){
+                long gainedXP = getSkillTracker().getGainedExperience(s);
+                long xpTilLvl = getSkills().experienceToLevel(s);
+                long xpPerHour = getSkillTracker().getGainedExperiencePerHour(s);
+                int gainedLvl = getSkillTracker().getGainedLevels(s);
+                int curLevel = getSkills().getRealLevel(s);
+                g.drawString(s.getName() + " " + curLevel + "(" + gainedLvl + ") : " + formatNumber((int)gainedXP) + "(" + formatNumber((int)xpPerHour)+")" + " :: " + formatNumber((int)xpTilLvl),5,baseY);
+                baseY+=15;
+            }
+        }
+    }
 
-        g.setColor(Color.GREEN);
-        g.setFont(new Font("Arial", Font.PLAIN, 12));
-        g.drawString("Crabs killed / hour: " + timer.getHourlyRate(crabsKilled), 5, 58);
-
-        //TODO add EXP an hour
+    //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
+    private String formatNumber(Integer number){
+        String[] suffix = new String[] { "K", "M", "B" };
+        int size = (number.intValue() != 0) ? (int) Math.log10(number) : 0;
+        if (size >= 3) {
+            while (size % 3 != 0) {
+                size = size - 1;
+            }
+        }
+        return (size >= 3) ? +(Math.round((number / Math.pow(10, size)) * 10) / 10d)
+                + suffix[(size / 3) - 1]
+                : +number + "";
     }
 
     private void createGUI() {
