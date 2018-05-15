@@ -17,11 +17,12 @@ public class Main extends AbstractScript {
 
     private boolean isRunning;
     private boolean usePoitions;
+    private boolean resetAgro;
     private String runTime; //in minutes
     private int crabsKilled;
     private Timer timer;
-    private Area crabArea = new Area(3731, 3844, 3735, 3848);
-    private Area resetArea = new Area(3736, 3815, 3738, 3814);
+    private Area crabArea = new Area(3257, 3244, 3259, 3247/*3731, 3844, 3735, 3848*/);
+    private Area resetArea = new Area(3257, 3226, 3261, 3229/*3736, 3815, 3738, 3814*/);
 
     private String enemyName = "Ammonite Crab";
 
@@ -37,18 +38,44 @@ public class Main extends AbstractScript {
     @Override
     public void onStart() {
         timer = new Timer();
+        resetAgro = false;
         createGUI();
     }
 
     @Override
     public int onLoop() {
+        //Toggle run on
+        if( !getWalking().isRunEnabled() ) {
+            //getWalking().toggleRun();
+        }
+
         if(isRunning) {
-            //if player is NOT in combat AND player is in crabArea
-            if( !getLocalPlayer().isInCombat() /*&& crabArea.contains(getLocalPlayer().getTile())*/ ) {
-                //then walk to resetArea
-                if( !resetArea.contains(getLocalPlayer().getTile()) ) {
-                    getWalking().walk(resetArea.getRandomTile());
-                    sleep(Calculations.random(1000, 2000));
+            //if player is NOT in crab area
+            if( !crabArea.contains(getLocalPlayer().getTile()) && !resetAgro) {
+                //walk to crab area
+                getWalking().walk(crabArea.getRandomTile());
+                sleepWhile( () -> !crabArea.contains(getLocalPlayer().getTile()), Calculations.random(3000, 5000));
+                log("Walking to crab area");
+            }
+
+            //if player is in crab area
+            if( crabArea.contains(getLocalPlayer().getTile()) ) {
+                log("In crab area");
+                //if player is NOT in combat for 7-12 seconds
+                if( !sleepWhile( () -> !getLocalPlayer().isInCombat(), Calculations.random(7000, 12000) ) ) {
+                    resetAgro = true;
+                    log("Running to reset area");
+                }
+            }
+
+            if( resetAgro ) {
+                //Walk to reset area
+                getWalking().walk(resetArea.getRandomTile());
+                sleepWhile( () -> !resetArea.contains(getLocalPlayer().getTile()), Calculations.random(3000, 5000));
+                log("In reset area");
+                if( resetArea.contains(getLocalPlayer().getTile()) ) {
+                    sleep(Calculations.random(3000, 5000));
+                    resetAgro = false;
                 }
             }
         }
@@ -63,10 +90,10 @@ public class Main extends AbstractScript {
     @Override
     public void onPause() {
         super.onPause();
-        log("Running: " + isRunning);
-        log("Run Time: " + runTime);
-        log("Use Super Strength: " + usePoitions);
-        log("Enemy: " + enemyName);
+//        log("Running: " + isRunning);
+//        log("Run Time: " + runTime);
+//        log("Use Super Strength: " + usePoitions);
+//        log("Enemy: " + enemyName);
     }
 
     @Override
