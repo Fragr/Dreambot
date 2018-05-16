@@ -82,7 +82,7 @@ public class Main extends AbstractScript {
             if( !crabArea.contains(getLocalPlayer().getTile()) && !resetAgro) {
                 //walk to crab area
                 getWalking().walk(crabArea.getRandomTile());
-                sleepWhile( () -> !crabArea.contains(getLocalPlayer().getTile()), Calculations.random(3000, 5000));
+                sleepWhile( () -> !crabArea.contains(getLocalPlayer().getTile()), Calculations.random(1000, 4000));
                 log("Walking to crab area");
             }
 
@@ -99,7 +99,7 @@ public class Main extends AbstractScript {
             if( resetAgro ) {
                 //Walk to reset area
                 getWalking().walk(resetArea.getRandomTile());
-                sleepWhile( () -> !resetArea.contains(getLocalPlayer().getTile()), Calculations.random(3000, 5000));
+                sleepWhile( () -> !resetArea.contains(getLocalPlayer().getTile()), Calculations.random(1000, 4000));
 
                 if( resetArea.contains(getLocalPlayer().getTile()) ) {
                     log("In reset area");
