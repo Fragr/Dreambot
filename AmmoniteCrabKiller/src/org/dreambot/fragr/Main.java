@@ -1,19 +1,22 @@
 package org.dreambot.fragr;
 
 import org.dreambot.api.methods.Calculations;
+import org.dreambot.api.methods.filter.impl.NameFilter;
 import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
 import org.dreambot.api.utilities.Timer;
+import org.dreambot.api.wrappers.items.Item;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
-@ScriptManifest(author = "Fragr", category = Category.COMBAT, description = "Kills Ammonite Crabs at Fossil Island", name = "Ammonite Crab Killer", version = 1.0)
+@ScriptManifest(author = "Fragr", category = Category.COMBAT, description = "Kills Ammonite Crabs at Fossil Island", name = "Ammonite Crab Killer", version = 1.1)
 public class Main extends AbstractScript {
 
     private Timer timer;
@@ -41,7 +44,6 @@ public class Main extends AbstractScript {
         resetAgro = false;
         isRunning = true;
 
-
         //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
         boolean scriptRunning = getClient().getInstance().getScriptManager().isRunning();
         for(Skill s : Skill.values()){
@@ -52,9 +54,27 @@ public class Main extends AbstractScript {
 
     @Override
     public int onLoop() {
+        int boostedLevel = getSkills().getBoostedLevels(Skill.STRENGTH);
+        int realLevel = getSkills().getRealLevel(Skill.STRENGTH);
+        int levelDiff = boostedLevel - realLevel;
+
+        List<Item> allItems = getInventory().all();
+
         //Toggle run on
         if( !getWalking().isRunEnabled() ) {
             //getWalking().toggleRun();
+        }
+
+        //Drink a super strength potion if boosted level is <= 1
+        if( levelDiff <= 1 && allItems != null) {
+            for( Item i : allItems) {
+                if( i.getName().contains("Super strength(") ) {
+                    log("Super strength drank");
+                    getInventory().interact(i.getName(), "Drink");
+                    break;
+                }
+            }
+            sleep(Calculations.random(2000, 3000));
         }
 
         if(isRunning) {
