@@ -4,10 +4,10 @@ Kills Ammonite Crabs on Fossil Island (must be on to start script properly) by r
 ## Current Features
 - Reset agro of crabs
 - Run to crab killing spot
+- Use super strength potions
 - XP Tracking taken from (https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/)
 ## Planned Features
 - GUI
-- Use super strength potions
 - Logout after specific time
 - Eating support
 - Bank for supplies (on the island only)
