@@ -68,7 +68,7 @@ public class Main extends AbstractScript {
             getWalking().toggleRun();
         }
 
-        if(isRunning && !timer.finished()) {
+        if(isRunning) {
             //Drink a super strength potion if boosted level is <= 1
             if( levelDiff <= 1 && allItems != null && usePoitions) {
                 for( Item i : allItems) {
@@ -109,11 +109,11 @@ public class Main extends AbstractScript {
                     resetAgro = false;
                 }
             }
-        }
 
-        if( timer.finished() ) {
-            //Stops the script and will automatically logout after time limit
-            stop();
+            if( timer.finished() ) {
+                //Stops the script and will automatically logout after time limit
+                stop();
+            }
         }
 
         return 300;

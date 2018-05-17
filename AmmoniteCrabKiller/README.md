@@ -7,6 +7,8 @@ Kills Ammonite Crabs on Fossil Island (must be on to start script properly) by r
 - Use super strength potions
 - XP Tracking taken from (https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/)
 ## Planned Features
+- Move camera around occasionally
+- Mouse movements
 - GUI
 - Logout after specific time
 - Eating support
