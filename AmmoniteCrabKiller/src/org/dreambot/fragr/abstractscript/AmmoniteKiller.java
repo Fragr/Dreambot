@@ -17,7 +17,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 @ScriptManifest(author = "Fragr", category = Category.COMBAT, description = "Kills Ammonite Crabs at Fossil Island", name = "Ammonite Crab Killer", version = 1.2)
-public class Main extends AbstractScript {
+public class AmmoniteKiller extends AbstractScript {
 
     private Timer timer;
     private Timer endTimer;
