@@ -7,11 +7,11 @@ Kills Ammonite Crabs on Fossil Island (must be on to start script properly) by r
 - Run to crab killing spot
 - Use super strength potions
 - XP Tracking taken from (https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/)
+- Stop script after set time (will logout automatically from afking)
 ## Planned Features
 - Select different crab locations
 - Move camera around occasionally
 - Mouse movements
-- Logout after specific time
 - Eating support
 - Bank for supplies (on the island only)
 - Change from tasked based script to node based
