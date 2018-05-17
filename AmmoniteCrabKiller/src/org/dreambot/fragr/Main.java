@@ -20,6 +20,7 @@ import java.util.List;
 public class Main extends AbstractScript {
 
     private Timer timer;
+    private Timer endTimer;
     private boolean isRunning;
     private boolean usePoitions;
     private boolean resetAgro;
@@ -41,15 +42,18 @@ public class Main extends AbstractScript {
     @Override
     public void onStart() {
         timer = new Timer();
+        timer.setRunTime(180);
+        log("Timer: " + timer.formatTime());
         resetAgro = false;
-        isRunning = true;
+        usePoitions = false;
+        isRunning = false;
+        createGUI();
 
         //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
         boolean scriptRunning = getClient().getInstance().getScriptManager().isRunning();
         for(Skill s : Skill.values()){
             getSkillTracker().start(s, !scriptRunning);
         }
-        //createGUI();
     }
 
     @Override
@@ -60,24 +64,25 @@ public class Main extends AbstractScript {
 
         List<Item> allItems = getInventory().all();
 
-        //Toggle run on
-        if( !getWalking().isRunEnabled() ) {
-            //getWalking().toggleRun();
-        }
-
-        //Drink a super strength potion if boosted level is <= 1
-        if( levelDiff <= 1 && allItems != null) {
-            for( Item i : allItems) {
-                if( i.getName().contains("Super strength(") ) {
-                    log("Super strength drank");
-                    getInventory().interact(i.getName(), "Drink");
-                    break;
-                }
-            }
-            sleep(Calculations.random(2000, 3000));
+        //if run is NOT enabled and run energy is > 50 turn run on
+        //else turn it off
+        if( !getWalking().isRunEnabled() && getWalking().getRunEnergy() > 50 ) {
+            getWalking().toggleRun();
         }
 
         if(isRunning) {
+            log("TIME REMAINING: " + timer.remaining());
+            //Drink a super strength potion if boosted level is <= 1
+            if( levelDiff <= 1 && allItems != null && usePoitions) {
+                for( Item i : allItems) {
+                    if( i.getName().contains("Super strength(") ) {
+                        log("Super strength drank");
+                        getInventory().interact(i.getName(), "Drink");
+                        break;
+                    }
+                }
+                sleep(Calculations.random(2000, 3000));
+            }
             //if player is NOT in crab area
             if( !crabArea.contains(getLocalPlayer().getTile()) && !resetAgro) {
                 //walk to crab area
@@ -90,7 +95,7 @@ public class Main extends AbstractScript {
             if( crabArea.contains(getLocalPlayer().getTile()) ) {
                 //log("In crab area");
                 //if player is NOT in combat for 7-12 seconds
-                if( !sleepWhile( () -> !getLocalPlayer().isInCombat(), Calculations.random(5000, 7000) ) ) {
+                if( !sleepWhile( () -> !getLocalPlayer().isInCombat(), Calculations.random(7000, 10000) ) ) {
                     resetAgro = true;
                     log("Running to reset area");
                 }
