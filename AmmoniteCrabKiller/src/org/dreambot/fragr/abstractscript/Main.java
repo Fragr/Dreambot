@@ -1,4 +1,4 @@
-package org.dreambot.fragr;
+package org.dreambot.fragr.abstractscript;
 
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.filter.impl.NameFilter;
@@ -138,14 +138,14 @@ public class Main extends AbstractScript {
     public void onPaint(Graphics g) {
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.PLAIN, 16));
-        g.drawString("Ammonite Crab Killer " + getVersion(), 5, 17);
+        g.drawString("Ammonite Crab Killer " + getVersion(), 5, 290);
 
         g.setColor(Color.GREEN);
         g.setFont(new Font("Arial", Font.PLAIN, 12));
-        g.drawString("Timer: " + timer.formatTime(), 5, 32);
+        g.drawString("Timer: " + timer.formatTime(), 5, 305);
 
         //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
-        int baseY = 45;
+        int baseY = 320;
         for(Skill s : Skill.values()){
             if(getSkillTracker().getGainedExperience(s) > 0){
                 long gainedXP = getSkillTracker().getGainedExperience(s);
