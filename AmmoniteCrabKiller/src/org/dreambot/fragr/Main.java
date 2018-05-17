@@ -47,7 +47,7 @@ public class Main extends AbstractScript {
         resetAgro = false;
         usePoitions = false;
         isRunning = false;
-        createGUI();
+        //createGUI();
 
         //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
         boolean scriptRunning = getClient().getInstance().getScriptManager().isRunning();
