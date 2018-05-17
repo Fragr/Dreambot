@@ -3,6 +3,7 @@ package org.dreambot.fragr.abstractscript;
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.filter.impl.NameFilter;
 import org.dreambot.api.methods.map.Area;
+import org.dreambot.api.methods.map.Tile;
 import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
@@ -27,7 +28,7 @@ public class AmmoniteKiller extends AbstractScript {
 
     private String runTime; //in minutes
 
-    private Area crabArea = new Area(/*3257, 3244, 3259, 3247*/3733, 3846, 3733, 3847);
+    private Area crabArea = new Area(/*3257, 3244, 3259, 3247*/3732, 3846, 3733, 3847);
     private Area resetArea = new Area(/*3257, 3226, 3261, 3229*/3736, 3815, 3738, 3814);
 
     /*
@@ -136,9 +137,18 @@ public class AmmoniteKiller extends AbstractScript {
 
     @Override
     public void onPaint(Graphics g) {
+        Tile crabTiles[] = crabArea.getTiles();
+
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.PLAIN, 16));
         g.drawString("Ammonite Crab Killer " + getVersion(), 5, 290);
+
+        if( crabTiles != null ) {
+            for(int i = 0; i < crabTiles.length; i++) {
+                Polygon tile = getMap().getPolygon(crabTiles[i]);
+                g.drawPolygon(tile);
+            }
+        }
 
         g.setColor(Color.GREEN);
         g.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -173,6 +183,7 @@ public class AmmoniteKiller extends AbstractScript {
                 : +number + "";
     }
 
+    //TODO Update GUI to use form
     private void createGUI() {
         JFrame frame = new JFrame("Ammonite Crab Killer" + getVersion());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
