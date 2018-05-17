@@ -16,7 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-@ScriptManifest(author = "Fragr", category = Category.COMBAT, description = "Kills Ammonite Crabs at Fossil Island", name = "Ammonite Crab Killer", version = 1.1)
+@ScriptManifest(author = "Fragr", category = Category.COMBAT, description = "Kills Ammonite Crabs at Fossil Island", name = "Ammonite Crab Killer", version = 1.2)
 public class Main extends AbstractScript {
 
     private Timer timer;
@@ -42,8 +42,6 @@ public class Main extends AbstractScript {
     @Override
     public void onStart() {
         timer = new Timer();
-        timer.setRunTime(180);
-        log("Timer: " + timer.formatTime());
         resetAgro = false;
         usePoitions = false;
         isRunning = false;
@@ -70,8 +68,7 @@ public class Main extends AbstractScript {
             getWalking().toggleRun();
         }
 
-        if(isRunning) {
-            log("TIME REMAINING: " + timer.remaining());
+        if(isRunning && !timer.finished()) {
             //Drink a super strength potion if boosted level is <= 1
             if( levelDiff <= 1 && allItems != null && usePoitions) {
                 for( Item i : allItems) {
@@ -113,6 +110,12 @@ public class Main extends AbstractScript {
                 }
             }
         }
+
+        if( timer.finished() ) {
+            //Stops the script and will automatically logout after time limit
+            stop();
+        }
+
         return 300;
     }
 
@@ -203,6 +206,7 @@ public class Main extends AbstractScript {
                 runTime = timeTextField.getText();
                 usePoitions = potionCheckBox.isSelected();
 
+                timer.setRunTime(Integer.parseInt(runTime) * 60000);
                 isRunning = true;
                 frame.dispose();
             }
