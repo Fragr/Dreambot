@@ -64,7 +64,6 @@ public class AmmoniteKiller extends AbstractScript {
         List<Item> allItems = getInventory().all();
 
         //if run is NOT enabled and run energy is > 50 turn run on
-        //else turn it off
         if( !getWalking().isRunEnabled() && getWalking().getRunEnergy() > 50 ) {
             getWalking().toggleRun();
         }
@@ -76,6 +75,7 @@ public class AmmoniteKiller extends AbstractScript {
                     if( i.getName().contains("Super strength(") ) {
                         log("Super strength drank");
                         getInventory().interact(i.getName(), "Drink");
+                        getMouse().move(getClient().getViewportTools().getRandomPointOnCanvas());
                         break;
                     }
                 }
@@ -86,14 +86,18 @@ public class AmmoniteKiller extends AbstractScript {
                 //walk to crab area
                 getWalking().walk(crabArea.getRandomTile());
                 sleepWhile( () -> !crabArea.contains(getLocalPlayer().getTile()), Calculations.random(1000, 4000));
-                log("Walking to crab area");
+                getCamera().rotateTo(Calculations.random(2400), Calculations.random(getClient().getLowestPitch(), 384));
+                log("Running to crab area");
             }
 
             //if player is in crab area
             if( crabArea.contains(getLocalPlayer().getTile()) ) {
                 //log("In crab area");
                 //if player is NOT in combat for 7-12 seconds
-                if( !sleepWhile( () -> !getLocalPlayer().isInCombat(), Calculations.random(7000, 10000) ) ) {
+                if( timer.finished() ) {
+                    //Stops the script and will automatically logout after time limit
+                    stop();
+                }else if( !sleepWhile( () -> !getLocalPlayer().isInCombat(), Calculations.random(7000, 10000) ) ) {
                     resetAgro = true;
                     log("Running to reset area");
                 }
@@ -109,11 +113,6 @@ public class AmmoniteKiller extends AbstractScript {
                     sleep(Calculations.random(3000, 5000));
                     resetAgro = false;
                 }
-            }
-
-            if( timer.finished() ) {
-                //Stops the script and will automatically logout after time limit
-                stop();
             }
         }
 
@@ -143,13 +142,6 @@ public class AmmoniteKiller extends AbstractScript {
         g.setFont(new Font("Arial", Font.PLAIN, 16));
         g.drawString("Ammonite Crab Killer " + getVersion(), 5, 290);
 
-        if( crabTiles != null ) {
-            for(int i = 0; i < crabTiles.length; i++) {
-                Polygon tile = getMap().getPolygon(crabTiles[i]);
-                g.drawPolygon(tile);
-            }
-        }
-
         g.setColor(Color.GREEN);
         g.setFont(new Font("Arial", Font.PLAIN, 12));
         g.drawString("Timer: " + timer.formatTime(), 5, 305);
@@ -165,6 +157,13 @@ public class AmmoniteKiller extends AbstractScript {
                 int curLevel = getSkills().getRealLevel(s);
                 g.drawString(s.getName() + " " + curLevel + "(" + gainedLvl + ") : " + formatNumber((int)gainedXP) + "(" + formatNumber((int)xpPerHour)+")" + " :: " + formatNumber((int)xpTilLvl),5,baseY);
                 baseY+=15;
+            }
+        }
+
+        if( crabTiles != null ) {
+            for(int i = 0; i < crabTiles.length; i++) {
+                Polygon tile = getMap().getPolygon(crabTiles[i]);
+                g.drawPolygon(tile);
             }
         }
     }
