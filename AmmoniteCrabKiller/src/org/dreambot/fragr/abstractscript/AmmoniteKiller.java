@@ -21,7 +21,6 @@ import java.util.List;
 public class AmmoniteKiller extends AbstractScript {
 
     private Timer timer;
-    private Timer endTimer;
     private boolean isRunning;
     private boolean usePoitions;
     private boolean resetAgro;

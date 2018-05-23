@@ -5,12 +5,12 @@ import org.dreambot.api.script.TaskNode;
 public class RunNode extends TaskNode {
     @Override
     public int priority() {
-        return super.priority();
+        return 2;
     }
 
     @Override
     public boolean accept() {
-        return false;
+        if
     }
 
     @Override

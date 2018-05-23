@@ -10,7 +10,7 @@ public class ResetNode extends TaskNode {
 
     @Override
     public boolean accept() {
-        return false;
+        return !crabArea.contains(getLocalPlayer().getTile()) && !resetAgro;
     }
 
     @Override
