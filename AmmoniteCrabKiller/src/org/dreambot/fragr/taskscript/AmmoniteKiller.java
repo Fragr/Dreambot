@@ -1,12 +1,14 @@
 package org.dreambot.fragr.taskscript;
 
 import org.dreambot.api.methods.map.Area;
+import org.dreambot.api.methods.map.Tile;
 import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.script.impl.TaskScript;
 import org.dreambot.api.utilities.Timer;
 import org.dreambot.fragr.taskscript.nodes.DrinkNode;
 import org.dreambot.fragr.taskscript.nodes.ResetNode;
 import org.dreambot.fragr.taskscript.nodes.RunNode;
+import org.dreambot.fragr.taskscript.nodes.TimerNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +25,9 @@ public class AmmoniteKiller extends TaskScript {
     public static Timer timer;
     public static boolean usePoitions;
 
+    private Area crabArea = new Area(/*3257, 3244, 3259, 3247*/3732, 3846, 3733, 3847);
+
+
     @Override
     public void onStart() {
         timer = new Timer();
@@ -31,7 +36,7 @@ public class AmmoniteKiller extends TaskScript {
         isRunning = false;
         createGUI();
 
-        addNodes(new DrinkNode(), new ResetNode(), new RunNode());
+        addNodes(new DrinkNode(), new ResetNode(), new RunNode(), new TimerNode());
 
         //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
         boolean scriptRunning = getClient().getInstance().getScriptManager().isRunning();
@@ -52,6 +57,40 @@ public class AmmoniteKiller extends TaskScript {
         return (size >= 3) ? +(Math.round((number / Math.pow(10, size)) * 10) / 10d)
                 + suffix[(size / 3) - 1]
                 : +number + "";
+    }
+
+    @Override
+    public void onPaint(Graphics g) {
+        Tile crabTiles[] = crabArea.getTiles();
+
+        g.setColor(Color.RED);
+        g.setFont(new Font("Arial", Font.PLAIN, 16));
+        g.drawString("Ammonite Crab Killer " + getVersion(), 5, 290);
+
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("Arial", Font.PLAIN, 12));
+        g.drawString("Timer: " + timer.formatTime(), 5, 305);
+
+        //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
+        int baseY = 320;
+        for(Skill s : Skill.values()){
+            if(getSkillTracker().getGainedExperience(s) > 0){
+                long gainedXP = getSkillTracker().getGainedExperience(s);
+                long xpTilLvl = getSkills().experienceToLevel(s);
+                long xpPerHour = getSkillTracker().getGainedExperiencePerHour(s);
+                int gainedLvl = getSkillTracker().getGainedLevels(s);
+                int curLevel = getSkills().getRealLevel(s);
+                g.drawString(s.getName() + " " + curLevel + "(" + gainedLvl + ") : " + formatNumber((int)gainedXP) + "(" + formatNumber((int)xpPerHour)+")" + " :: " + formatNumber((int)xpTilLvl),5,baseY);
+                baseY+=15;
+            }
+        }
+
+        if( crabTiles != null ) {
+            for(int i = 0; i < crabTiles.length; i++) {
+                Polygon tile = getMap().getPolygon(crabTiles[i]);
+                g.drawPolygon(tile);
+            }
+        }
     }
 
     //TODO Update GUI to use form
