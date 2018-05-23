@@ -69,7 +69,7 @@ public class AmmoniteKiller extends AbstractScript {
 
         if(isRunning) {
             //Drink a super strength potion if boosted level is <= 1
-            if( levelDiff <= 1 && allItems != null && usePoitions) {
+            if( levelDiff <= 1 && allItems != null && usePoitions ) {
                 for( Item i : allItems) {
                     if( i.getName().contains("Super strength(") ) {
                         log("Super strength drank");

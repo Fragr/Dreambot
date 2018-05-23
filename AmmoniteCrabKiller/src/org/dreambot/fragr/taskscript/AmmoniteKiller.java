@@ -4,6 +4,9 @@ import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.script.impl.TaskScript;
 import org.dreambot.api.utilities.Timer;
+import org.dreambot.fragr.taskscript.nodes.DrinkNode;
+import org.dreambot.fragr.taskscript.nodes.ResetNode;
+import org.dreambot.fragr.taskscript.nodes.RunNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,15 +15,13 @@ import java.awt.event.ActionListener;
 
 public class AmmoniteKiller extends TaskScript {
 
-    private Timer timer;
     private boolean isRunning;
-    private boolean usePoitions;
     private boolean resetAgro;
 
     private String runTime; //in minutes
 
-    private Area crabArea = new Area(/*3257, 3244, 3259, 3247*/3732, 3846, 3733, 3847);
-    private Area resetArea = new Area(/*3257, 3226, 3261, 3229*/3736, 3815, 3738, 3814);
+    public static Timer timer;
+    public static boolean usePoitions;
 
     @Override
     public void onStart() {
@@ -30,7 +31,7 @@ public class AmmoniteKiller extends TaskScript {
         isRunning = false;
         createGUI();
 
-        addNodes(new DrinkNode(), new ResetNode(), new RundNode());
+        addNodes(new DrinkNode(), new ResetNode(), new RunNode());
 
         //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
         boolean scriptRunning = getClient().getInstance().getScriptManager().isRunning();
