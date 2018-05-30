@@ -1,23 +1,24 @@
 package org.dreambot.fragr.taskscript.nodes;
 
-import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.script.TaskNode;
 import org.dreambot.fragr.taskscript.AK;
 
-public class secondNode extends TaskNode {
+public class TimerNode extends TaskNode {
     @Override
     public int priority() {
-        return 1;
+        return 4;
     }
 
     @Override
     public boolean accept() {
-        return !AK.crabArea.contains(getLocalPlayer().getTile());
+        if( AK.timer != null && AK.isRunning ) {
+            return AK.timer.finished();
+        }
+        return false;
     }
 
     @Override
     public int execute() {
-        log("second node");
-        return Calculations.random(500, 1000);
+        return -1;
     }
 }
