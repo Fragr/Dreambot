@@ -35,6 +35,7 @@ public class DrinkNode extends TaskNode {
             if( i.getName().contains("Super strength(") ) {
                 log("Super strength drank");
                 getInventory().interact(i.getName(), "Drink");
+                Calculations.random(600, 1200);
                 getMouse().move(getClient().getViewportTools().getRandomPointOnCanvas());
                 break;
             }

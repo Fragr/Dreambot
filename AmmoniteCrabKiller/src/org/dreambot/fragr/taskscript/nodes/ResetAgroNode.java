@@ -14,14 +14,14 @@ public class ResetAgroNode extends TaskNode {
     public boolean accept() {
         if (AK.isRunning)
             return AK.crabArea.contains(getLocalPlayer().getTile()) &&
-                !sleepWhile( () -> !getLocalPlayer().isInCombat(), Calculations.random(10000, 12000) );
+                !sleepWhile( () -> !getLocalPlayer().isInCombat(), Calculations.random(8000, 10000) );
         return false;
     }
 
     @Override
     public int execute() {
         AK.resetAgro = true;
-        log("Running to reset area");
-        return Calculations.random(500, 1000);
+        log("Reset agro set to true");
+        return Calculations.random(100, 400);
     }
 }

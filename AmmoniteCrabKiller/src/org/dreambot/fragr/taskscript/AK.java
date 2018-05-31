@@ -25,14 +25,14 @@ public class AK extends TaskScript {
     public static Timer timer;
     public static boolean usePoitions = false;
 
-    public static Area crabArea = new Area(/*3257, 3244, 3259, 3247*/3732, 3846, 3733, 3847);
+    public static Area crabArea = new Area(/*3257, 3244, 3259, 3247*/3733, 3846, 3733, 3847);
     public static Area resetArea = new Area(/*3257, 3226, 3261, 3229*/3736, 3815, 3738, 3814);
 
     @Override
     public void onStart() {
         createGUI();
 
-        addNodes(new CrabNode(), new ResetAgroNode(), new ResetNode(), new DrinkNode(), new TimerNode());
+        addNodes(new CrabNode(), new ResetAgroNode(), new ResetNode(), new DrinkNode(), new TimerNode(), new CameraNode());
 
         //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
         boolean scriptRunning = getClient().getInstance().getScriptManager().isRunning();

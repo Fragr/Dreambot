@@ -22,6 +22,7 @@ public class ResetNode extends TaskNode {
         //Walk to reset area
         getWalking().walk(AK.resetArea.getRandomTile());
         sleepWhile( () -> !AK.resetArea.contains(getLocalPlayer().getTile()), Calculations.random(1000, 4000));
+        log("Running to reset area");
 
         if( AK.resetArea.contains(getLocalPlayer().getTile()) ) {
             log("In reset area");
