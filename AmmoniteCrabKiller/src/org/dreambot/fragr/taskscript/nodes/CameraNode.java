@@ -16,7 +16,7 @@ public class CameraNode extends TaskNode {
     @Override
     public boolean accept() {
         Random r = new Random();
-        int val = r.nextInt(100) + 1;
+        int val = r.nextInt(200) + 1;
         val = val % 10;
 
         log("" + val);
