@@ -19,10 +19,9 @@ public class CameraNode extends TaskNode {
         int val = r.nextInt(200) + 1;
         val = val % 10;
 
-        log("" + val);
-
         if( AK.crabArea.contains(getLocalPlayer().getTile()) && val == 0)
             return true;
+        sleep(Calculations.random(3000, 7000));
         return false;
     }
 

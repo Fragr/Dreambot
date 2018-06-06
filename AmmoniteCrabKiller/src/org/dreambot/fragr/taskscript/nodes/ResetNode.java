@@ -21,14 +21,15 @@ public class ResetNode extends TaskNode {
     public int execute() {
         //Walk to reset area
         getWalking().walk(AK.resetArea.getRandomTile());
-        sleepWhile( () -> !AK.resetArea.contains(getLocalPlayer().getTile()), Calculations.random(1000, 4000));
+        //getCamera().rotateTo(Calculations.random(2000), Calculations.random(getClient().getLowestPitch(), 384));
+        sleepWhile( () -> !AK.resetArea.contains(getLocalPlayer().getTile()), Calculations.random(300, 600));
         log("Running to reset area");
 
         if( AK.resetArea.contains(getLocalPlayer().getTile()) ) {
             log("In reset area");
-            sleep(Calculations.random(3000, 5000));
+            sleep(Calculations.random(700, 1200));
             AK.resetAgro = false;
         }
-        return Calculations.random(500, 1000);
+        return Calculations.random(300, 600);
     }
 }

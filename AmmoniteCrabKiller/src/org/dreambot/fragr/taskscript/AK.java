@@ -56,19 +56,28 @@ public class AK extends TaskScript {
     }
 
     @Override
+    public void stop() {
+        resetAgro = false;
+        timer = null;
+        isRunning = false;
+        usePoitions = false;
+        super.stop();
+    }
+
+    @Override
     public void onPaint(Graphics g) {
         Tile crabTiles[] = crabArea.getTiles();
 
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.PLAIN, 16));
-        g.drawString("Ammonite Crab Killer " + getVersion(), 5, 290);
+        g.drawString("Ammonite Crab Killer " + getVersion(), 5, 260);
 
         g.setColor(Color.GREEN);
         g.setFont(new Font("Arial", Font.PLAIN, 12));
-        g.drawString("Timer: " + timer.formatTime(), 5, 305);
+        g.drawString("Timer: " + timer.formatTime(), 5, 275);
 
         //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
-        int baseY = 320;
+        int baseY = 290;
         for(Skill s : Skill.values()){
             if(getSkillTracker().getGainedExperience(s) > 0){
                 long gainedXP = getSkillTracker().getGainedExperience(s);
