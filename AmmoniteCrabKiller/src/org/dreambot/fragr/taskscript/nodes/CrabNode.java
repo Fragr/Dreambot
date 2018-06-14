@@ -21,8 +21,8 @@ public class CrabNode extends TaskNode {
     public int execute() {
         getWalking().walk(AK.crabArea.getRandomTile());
         //getCamera().rotateTo(Calculations.random(2000), Calculations.random(getClient().getLowestPitch(), 384));
-        sleepWhile( () -> !AK.crabArea.contains(getLocalPlayer().getTile()), Calculations.random(300, 600));
+        //sleepWhile( () -> !AK.crabArea.contains(getLocalPlayer().getTile()), Calculations.random(100, 200));
         log("Running to crab area");
-        return Calculations.random(300, 600);
+        return Calculations.random(50, 100);
     }
 }
