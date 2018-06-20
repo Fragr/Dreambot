@@ -45,7 +45,15 @@ public class GC extends AbstractScript {
     @Override
     public int onLoop() {
         NPC banker = getNpcs().closest(npc -> npc != null && npc.hasAction("Bank"));
-        GameObject furnace = getGameObjects().closest(GameObject -> GameObject != null && GameObject.hasAction("Smelt"));
+        GameObject[] objects = getGameObjects().getObjectsOnTile(new Tile(3110, 3499));
+        GameObject furnace = null;
+        for( GameObject o : objects ) {
+            if( o.hasAction("Smelt") ){
+                furnace = o;
+                //log("SUCCESS: Furnace object initialized");
+            }
+        }
+        //GameObject furnace = getGameObjects().closest( GameObject -> GameObject != null && GameObject.hasAction("Smelt"));
         GameObject bankBooth = getGameObjects().closest( GameObject -> GameObject != null && GameObject.hasAction("Bank"));
         Tile furnaceTile = new Tile(3109, 3499);
         Area furnaceArea = new Area( new Tile(3109, 3499));
@@ -94,13 +102,17 @@ public class GC extends AbstractScript {
                     getBank().close();
                 }
             }else if( getInventory().contains("Gold bar") && !smelting){
-                log("Running to furnace");
-                //getCamera().rotateToEntity(furnace);
-                //sleep(Calculations.random(1000, 1250));
-                furnace.interact("Smelt");
-                sleep(Calculations.random(5500, 6500));
-                smelting = true;
-                log("Smelting: " + smelting);
+                if( furnace != null ) {
+                    log("Running to furnace");
+                    //getCamera().rotateToEntity(furnace);
+                    //sleep(Calculations.random(1000, 1250));
+                    furnace.interact("Smelt");
+                    //sleep(Calculations.random(5500, 6500));
+                    smelting = true;
+                    log("Smelting: " + smelting);
+                }else{
+                    log("ERROR: Furnace object NULL");
+                }
             }else if(smelting){
                 //Sleep until the player is next to the furnace OR 6.5-7 seconds has passed
                 sleepUntil( () -> getLocalPlayer().getTile().equals(furnaceTile), Calculations.random(6500, 7000) );
@@ -114,18 +126,18 @@ public class GC extends AbstractScript {
                         //sleep(Calculations.random(100, 500));
                         int x = getMouse().getX();
                         int y = getMouse().getY();
-                        log("oldX: " + x + " oldY: " + y);
-                        Random xRand = new Random();
-                        Random yRand = new Random();
-                        x += xRand.nextInt(16);
-                        y += yRand.nextInt(16);
-                        log("newX: " + x + " newY: " + y);
-                        getMouse().move(new Point(x, y));
-                        //getMouse().moveMouseOutsideScreen();
+                        log("X: " + x + " Y: " + y);
+//                        Random xRand = new Random();
+//                        Random yRand = new Random();
+//                        x += xRand.nextInt(16);
+//                        y += yRand.nextInt(16);
+//                        log("newX: " + x + " newY: " + y);
+//                        getMouse().move(new Point(x, y));
+//                        getMouse().moveMouseOutsideScreen();
                         sleepUntil( () -> !getInventory().contains("Gold bar"), Calculations.random(40000, 50000) );
                         smelting = false;
                         log("Smelting: " + smelting);
-                        return Calculations.random(7000, 20000);
+                        return Calculations.random(3000, 15000);
                     }
                 }else{
                     smelting = false;
@@ -168,6 +180,7 @@ public class GC extends AbstractScript {
         buttonPanel.add(button);
         frame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
+        log("GUI loaded");
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -181,7 +194,6 @@ public class GC extends AbstractScript {
                 frame.dispose();
             }
         });
-        log("GUI loaded");
     }
 
     //Taken from https://dreambot.org/forums/index.php?/topic/820-experience-tracker-plugin/
@@ -229,5 +241,9 @@ public class GC extends AbstractScript {
                 baseY+=15;
             }
         }
+
+        Polygon p = getMap().getPolygon(new Tile(3110, 3499));
+        g.drawPolygon(p);
+
     }
 }
