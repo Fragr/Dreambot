@@ -103,11 +103,12 @@ public class GC extends AbstractScript {
                 }
             }else if( getInventory().contains("Gold bar") && !smelting){
                 if( furnace != null ) {
+                    log("Looking at furnace");
+                    //getCamera().rotateToTile(furnace.getTile());
+                    sleepUntil( () -> getCamera().rotateToTile(new Tile(3110, 3499)), 5000);
+                    sleep(Calculations.random(1000, 1750));
                     log("Running to furnace");
-                    //getCamera().rotateToEntity(furnace);
-                    //sleep(Calculations.random(1000, 1250));
                     furnace.interact("Smelt");
-                    //sleep(Calculations.random(5500, 6500));
                     smelting = true;
                     log("Smelting: " + smelting);
                 }else{
@@ -134,7 +135,7 @@ public class GC extends AbstractScript {
 //                        log("newX: " + x + " newY: " + y);
 //                        getMouse().move(new Point(x, y));
 //                        getMouse().moveMouseOutsideScreen();
-                        sleepUntil( () -> !getInventory().contains("Gold bar"), Calculations.random(40000, 50000) );
+                        sleepUntil( () -> !getInventory().contains("Gold bar"), Calculations.random(42000, 50000) );
                         smelting = false;
                         log("Smelting: " + smelting);
                         return Calculations.random(3000, 15000);
