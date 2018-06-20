@@ -21,6 +21,7 @@ import java.util.List;
 public class AmmoniteKiller extends AbstractScript {
 
     private Timer timer;
+    private JFrame frame;
     private boolean isRunning;
     private boolean usePoitions;
     private boolean resetAgro;
@@ -120,6 +121,7 @@ public class AmmoniteKiller extends AbstractScript {
 
     @Override
     public void onExit() {
+        frame.dispose();
         super.onExit();
     }
 
@@ -183,7 +185,7 @@ public class AmmoniteKiller extends AbstractScript {
 
     //TODO Update GUI to use form
     private void createGUI() {
-        JFrame frame = new JFrame("Ammonite Crab Killer" + getVersion());
+        frame = new JFrame("Ammonite Crab Killer" + getVersion());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(getClient().getInstance().getCanvas());
         frame.setPreferredSize(new Dimension(300, 170));

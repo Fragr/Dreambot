@@ -21,6 +21,7 @@ public class AK extends TaskScript {
     public static boolean resetAgro = false;
 
     private String runTime; //in minutes
+    private JFrame frame;
 
     public static Timer timer;
     public static boolean usePoitions = false;
@@ -57,10 +58,7 @@ public class AK extends TaskScript {
 
     @Override
     public void stop() {
-        resetAgro = false;
-        timer = null;
-        isRunning = false;
-        usePoitions = false;
+        frame.dispose();
         super.stop();
     }
 
@@ -100,7 +98,7 @@ public class AK extends TaskScript {
 
     //TODO Update GUI to use form
     private void createGUI() {
-        JFrame frame = new JFrame("Ammonite Crab Killer" + getVersion());
+        frame = new JFrame("Ammonite Crab Killer" + getVersion());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(getClient().getInstance().getCanvas());
         frame.setPreferredSize(new Dimension(300, 170));
@@ -126,6 +124,9 @@ public class AK extends TaskScript {
         buttonPanel.setLayout(new FlowLayout());
 
         JButton button = new JButton("Start Script");
+        buttonPanel.add(button);
+        frame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -140,8 +141,5 @@ public class AK extends TaskScript {
                 frame.dispose();
             }
         });
-        buttonPanel.add(button);
-
-        frame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
     }
 }
