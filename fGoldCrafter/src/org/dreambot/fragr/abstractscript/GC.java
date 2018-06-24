@@ -62,6 +62,7 @@ public class GC extends AbstractScript {
         //TODO Check crafting stats every so often
 
         if( isRunning ) {
+            log("Script is running");
             //Check to seee if inventory does NOT contain bracelet mould
             if( !getInventory().contains("Bracelet mould") ){
                 log("Withdrawing bracelet mould");
@@ -70,14 +71,13 @@ public class GC extends AbstractScript {
                 sleepUntil( () -> getBank().isOpen(), 3000);
                 if( getInventory().count("Gold bar") < 27 ){
                     getBank().withdrawAll("Gold bar");
-                }else{
-                    getBank().close();
-                    sleep(Calculations.random(700, 1500));
                 }
+                getBank().close();
+                sleep(Calculations.random(700, 1500));
             }else if( !getInventory().contains("Gold bar") ){
-                //If inventory has gold bracelets and no more gold bars left
+                //If inventory has gold bracelets AND no more gold bars left
                 if( getInventory().contains("Gold bracelet")
-                        && !getInventory().contains("Gold bar")){
+                        && !getInventory().contains("Gold bar") ){
                     //Bank, deposit bracelets and grab more bars
                     sleep(Calculations.random(500, 950));
                     if( !bankArea.contains(getLocalPlayer().getTile()) ) {
@@ -94,18 +94,29 @@ public class GC extends AbstractScript {
                         getBank().withdrawAll("Gold bar");
                         getBank().close();
                 }else{
-                    //Bank, grab bars
-                    log("Banking, grabbing gold bars");
+                    //Inventory empty, grab bars
                     banker.interact("Bank");
                     sleepUntil( () -> getBank().isOpen(), 3000);
+                    log("Gold bar count: " + getBank().count("Gold bar"));
+                    if( getBank().count("Gold bar") <= 1 ) {
+                        sleep(Calculations.random(1200, 2700));
+                        //Bank out of gold bars
+                        log("Out of gold bars");
+                        getBank().close();
+                        stop();
+                        return 0;
+                    }
+                    //Bank, grab bars
+                    log("Banking, grabbing gold bars");
                     getBank().withdrawAll("Gold bar");
                     getBank().close();
                 }
             }else if( getInventory().contains("Gold bar") && !smelting){
                 if( furnace != null ) {
-                    log("Looking at furnace");
-                    //getCamera().rotateToTile(furnace.getTile());
-                    sleepUntil( () -> getCamera().rotateToTile(new Tile(3110, 3499)), 5000);
+                    if( !getMap().isVisible(furnaceTile) ) {
+                        log("Looking at furnace");
+                        sleepUntil( () -> getCamera().rotateToTile(new Tile(3110, 3499)), 5000);
+                    }
                     sleep(Calculations.random(1000, 1750));
                     log("Running to furnace");
                     furnace.interact("Smelt");
